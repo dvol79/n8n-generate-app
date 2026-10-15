@@ -239,6 +239,163 @@ npm run dev -- --port 3000
 
 ---
 
+## 🌐 Деплой на GitHub Pages
+
+Проект настроен для автоматического деплоя на GitHub Pages через GitHub Actions.
+
+### Подготовка проекта
+
+#### 1. Настройте base path в vite.config.js
+
+Откройте `vite.config.js` и измените `base` на имя вашего репозитория:
+
+```javascript
+export default defineConfig({
+  plugins: [react()],
+  base: '/имя-вашего-репозитория/', // Например: '/n8n-supabase-docker/'
+  // ... остальная конфигурация
+});
+```
+
+**Важно:** Если вы деплоите на корневой домен (username.github.io), установите `base: '/'`.
+
+#### 2. Создайте репозиторий на GitHub
+
+```bash
+# Инициализируйте Git (если ещё не сделано)
+git init
+
+# Добавьте файлы
+git add .
+git commit -m "Initial commit"
+
+# Создайте репозиторий на GitHub и добавьте remote
+git remote add origin https://github.com/ваш-username/имя-репозитория.git
+git branch -M main
+git push -u origin main
+```
+
+### Настройка GitHub Pages
+
+#### 1. Включите GitHub Pages в настройках репозитория
+
+1. Перейдите в ваш репозиторий на GitHub
+2. Откройте **Settings** → **Pages**
+3. В разделе **Source** выберите **GitHub Actions**
+
+#### 2. Проверьте workflow файл
+
+Файл `.github/workflows/deploy.yml` уже создан и содержит:
+- Автоматическую сборку при пуше в ветку `main`
+- Загрузку артефактов сборки
+- Деплой на GitHub Pages
+
+#### 3. Запустите деплой
+
+Просто запушьте изменения в ветку `main`:
+
+```bash
+git push origin main
+```
+
+GitHub Actions автоматически:
+1. Установит зависимости (`npm ci`)
+2. Соберёт проект (`npm run build`)
+3. Задеплоит на GitHub Pages
+
+### Мониторинг деплоя
+
+1. Перейдите в вкладку **Actions** в вашем репозитории
+2. Найдите workflow **Deploy to GitHub Pages**
+3. Проверьте статус выполнения
+
+### URL вашего приложения
+
+После успешного деплоя приложение будет доступно по адресу:
+
+```
+https://ваш-username.github.io/имя-репозитория/
+```
+
+Например: `https://ivanov.github.io/n8n-supabase-docker/`
+
+### Ручной запуск деплоя
+
+Вы можете запустить деплой вручную:
+
+1. Перейдите в **Actions** → **Deploy to GitHub Pages**
+2. Нажмите **Run workflow**
+3. Выберите ветку и нажмите **Run workflow**
+
+### Обновление приложения
+
+Для обновления просто запушьте изменения:
+
+```bash
+# Внесите изменения
+git add .
+git commit -m "Update application"
+git push origin main
+```
+
+GitHub Actions автоматически пересоберёт и задеплоит новую версию.
+
+### Кастомный домен (опционально)
+
+Если вы хотите использовать собственный домен:
+
+1. В **Settings** → **Pages** укажите ваш домен
+2. Создайте файл `CNAME` в корне репозитория с вашим доменом
+3. Настройте DNS-записи у вашего регистратора
+
+### Быстрый старт для GitHub Pages
+
+```bash
+# 1. Клонируйте репозиторий
+git clone https://github.com/ваш-username/n8n-supabase-docker.git
+cd n8n-supabase-docker
+
+# 2. Установите зависимости
+npm install
+
+# 3. Настройте base path в vite.config.js
+# Измените строку:
+# const base = process.env.GITHUB_PAGES ? '/имя-репозитория/' : '/';
+# на ваше имя репозитория
+
+# 4. Создайте репозиторий на GitHub
+git init
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/ваш-username/n8n-supabase-docker.git
+git branch -M main
+git push -u origin main
+
+# 5. Включите GitHub Pages в Settings → Pages → Source: GitHub Actions
+
+# 6. Готово! Приложение будет доступно по адресу:
+# https://ваш-username.github.io/n8n-supabase-docker/
+```
+
+### Устранение проблем с деплоем
+
+#### Страница не открывается (404)
+
+- Проверьте, что `base` в `vite.config.js` совпадает с именем репозитория
+- Убедитесь, что GitHub Pages включён и источник — **GitHub Actions**
+
+#### Белый экран после деплоя
+
+- Проверьте консоль браузера на ошибки
+- Убедитесь, что пути к ассетам корректные (должны начинаться с `/имя-репозитория/`)
+
+#### Workflow не запускается
+
+- Проверьте, что файл `.github/workflows/deploy.yml` существует в ветке `main`
+- Убедитесь, что у репозитория есть необходимые permissions
+
+---
+
 ## 📦 Требования для Docker-стека
 
 - **Docker Desktop** (macOS/Windows) или **Docker Engine** + **Docker Compose** (Linux)
