@@ -7,8 +7,7 @@ export interface ConfigFile {
 }
 
 export const generateDockerCompose = (config: ProjectConfig): string => {
-  return `version: '3.8'
-
+  return `
 services:
   # ============================================
   # n8n - Workflow Automation
