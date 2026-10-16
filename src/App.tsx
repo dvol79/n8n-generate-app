@@ -57,8 +57,8 @@ function CodeBlock({ code, language, filename }: { code: string; language: strin
           )}
         </button>
       </div>
-      <div className="overflow-x-auto">
-        <pre className="p-4 text-sm leading-relaxed">
+      <div className="p-2 overflow-x-auto">
+        <pre className="text-sm leading-relaxed">
           <code ref={codeRef} className={`language-${language}`}>
             {code}
           </code>
